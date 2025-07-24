@@ -131,6 +131,13 @@ def extract_features(directory):
         image = image - 1.0
         feature = model.predict(image)
         features[img] = feature
-        
+
     return features
         
+# 2048 feature vector
+features = extract_features(dataset_images)
+# dump the features to a file
+dump(features,open("features.p","wb"))
+# load the features from the file
+features = load(open("features.p","rb"))
+
