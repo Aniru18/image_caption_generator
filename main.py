@@ -61,3 +61,21 @@ def cleaning_text(captions):
             captions[img][i] = img_caption
 
     return captions
+
+# build vocabulary of all unique words
+def text_vocabulary(descriptions):
+    vocab = set()
+    for key in descriptions.key():
+        [vocab.update(d.aplit())for d in descriptions[key]]
+
+    return vocab
+# Save all descriptions in one file 
+def save_descriptions(descriptions, filename):
+    lines = list()
+    for key, desc_list in descriptions.items():
+        for desc in desc_list:
+            lines.append(key + '\t' + desc)
+    data = '\n'.join(lines)
+    file = open(filename,'w')
+    file.write(data)
+    file.close()
