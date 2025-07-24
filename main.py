@@ -116,3 +116,21 @@ weights_path = download_with_retry(weights_url,"xception_weights.h5")
 # Load the Xception model
 model = Xception(include_top=False, pooling='avg', weights = weights_path,)
 
+def extract_features(directory):
+    features = {}
+    valid_images = [".jpg", ".jpeg", ".png"]
+    # Loop through all files in the directory
+    for img in tqdm(os.listdir(directory)):
+        if os.path.splitext(img)[1].lower() not in valid_images:
+            continue
+        filename = directory + "/" + img
+        image = Image.open(filename)
+        image = image.resize((299, 299))
+        image = np.expand_dims(image,axis=0)
+        image = image/127.5
+        image = image - 1.0
+        feature = model.predict(image)
+        features[img] = feature
+        
+    return features
+        
