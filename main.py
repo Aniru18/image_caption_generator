@@ -79,3 +79,40 @@ def save_descriptions(descriptions, filename):
     file = open(filename,'w')
     file.write(data)
     file.close()
+
+# Set these path according to project folder in you system
+dataset_text = "/Users/sreemanti/Documents/youtube/youtube-teach/image caption generator/Flickr8k_text"
+dataset_images = "/Users/sreemanti/Documents/youtube/youtube-teach/image caption generator/Flicker8k_Dataset"
+
+# we prepare our text data
+filename = dataset_text + "/" + "Flickr8k.token.txt"
+#loading the file that contains all data
+#mapping them into descriptions dictionary img to 5 captions
+descriptions = all_img_captions(filename)
+print("Length of descriptions =" ,len(descriptions))
+
+# #cleaning the descriptions
+clean_descriptions = cleaning_text(descriptions)
+
+# #building vocabulary 
+vocabulary = text_vocabulary(clean_descriptions)
+print("Length of vocabulary = ", len(vocabulary))
+
+# #saving each description to file 
+save_descriptions(clean_descriptions, "descriptions.txt")
+
+def download_with_retry(url, filename, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return get_file(filename, url)
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise e
+            print(f"Download attempt {attempt + 1} failed. Retrying in 5 seconds...")
+            time.sleep(5)
+# Replace the Xception model initialization with:           
+weights_url = "https://storage.googleapis.com/tensorflow/keras-applications/xception/xception_weights_tf_dim_ordering_tf_kernels_notop.h5"
+weights_path = download_with_retry(weights_url,"xception_weights.h5")
+# Load the Xception model
+model = Xception(include_top=False, pooling='avg', weights = weights_path,)
+
