@@ -141,3 +141,9 @@ dump(features,open("features.p","wb"))
 # load the features from the file
 features = load(open("features.p","rb"))
 
+#load the data 
+def load_photos(filename):
+    file = load_doc(filename)
+    photos = file.split("\n")[:-1]
+    photos_present = [photo for photo in photos if os.path.exists(os.path.join(dataset_images, photo))]
+    return photos_present
