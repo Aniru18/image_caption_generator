@@ -147,3 +147,30 @@ def load_photos(filename):
     photos = file.split("\n")[:-1]
     photos_present = [photo for photo in photos if os.path.exists(os.path.join(dataset_images, photo))]
     return photos_present
+
+def load_clean_descriptions(filename, photos):
+    file = load_doc(filename)
+    descriptions = {}
+
+    for line in flile.split("\n"):
+        word = line.split()
+        if len(word)<2:
+            continue
+        image,image_caption = word[0], word[1:]
+
+        for image in photos:
+            if image not in descriptions:
+                descriptions[image] = []
+            desc = '<start> ' + " ".join(image_caption) + ' <end>'
+            descriptions[image].append(desc)
+        
+        return descriptions
+    
+def load_features(photos):
+    #loading all features
+    all_features = load(open("features.p","rb"))
+    #selecting only needed features
+    features = {k:all_features[k] for k in photos}
+    return features
+
+filename = dataset_text + "/" + "Flickr_8k.trainImages.txt"
