@@ -174,3 +174,21 @@ def load_features(photos):
     return features
 
 filename = dataset_text + "/" + "Flickr_8k.trainImages.txt"
+
+#train = loading_data(filename)
+train_images = load_photos(filename)
+train_descriptions = load_clean_descriptions("descriptions.txt", train_images)
+train_features = load_features(train_images)
+
+def dict_to_list(descriptions):
+    all_desc =[]
+    for key in descriptions.keys():
+        [all_desc.append(d) for d in descriptions[key]]
+    
+    return all_desc
+
+def create_tokenizer(descriptions):
+    desc_list = dict_to_list(descriptions)
+    tokenizer = Tokenizer()
+    tokenizer.fit_on_texts(desc_list)
+    return tokenizer
